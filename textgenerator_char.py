@@ -6,7 +6,9 @@ Created on Thu May 27 20:31:49 2021
 """
 """
 Denna fil genererar text genom att generera en tecken i taget
-
+För att köra koden måsten man först köra filen textprocessing_char.py
+Denna modell är sparad i saved_model så om man vill köra textgenererning utan 
+att träna modellen så kan man kommentera ut rad 55 till 70. 
 """
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
@@ -50,19 +52,15 @@ char_len= x_data.shape[2]
 maxlen=x_data.shape[1]
 
 # build the model: a single LSTM
-print('Build model...')
 model = Sequential()
 model.add(LSTM(128, input_shape=(maxlen, char_len)))
 model.add(Dense(char_len, activation='softmax'))
 
 optimizer = Adam(lr=0.001)
-
 model.compile(loss='categorical_crossentropy', optimizer=optimizer)
-
 model.summary()
 
 callbacks= keras.callbacks.EarlyStopping(monitor="val_loss", patience=3)
-
 model.fit(x_train, y_train,
           batch_size=16,
           epochs=10,
